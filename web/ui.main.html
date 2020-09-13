@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="text/javascript" src="/eel.js"></script>
+  <link rel="stylesheet" href="./css/toastui-editor.min.css">
+  <link rel="stylesheet" href="./css/codemirror.min.css" />
+  <!-- <link rel="stylesheet" href="./css/darcula.css"> -->
+  <link rel="stylesheet" href="./css/menu.css">
+
+
+  <title>Markdown Editor</title>
+</head>
+
+<style>
+  body {
+    padding: 0;
+    margin: 0;
+  }
+
+  .dark-theme {
+    background-color: #272727;
+    color: white;
+  }
+
+  .footer {
+    padding: 8px;
+    text-align: center;
+  }
+
+  .te-preview {
+    background-color: white !important;
+  }
+</style>
+
+<!-- <style>
+  ul.main-menu>li {
+    margin: 0;
+    display: inline;
+    list-style-type: none;
+    padding: 6px 4px 6px 6px;
+    line-height: 28px;
+    vertical-align: middle;
+    cursor: default;
+    outline: none;
+    border-style: solid;
+    border-width: 1px 1px 0 1px;
+    border-color: transparent;
+  }
+
+  ul.main-menu>li.active-menu {
+    background-color: #fff;
+    border-color: #ccc;
+    -webkit-box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  /* more styles here */
+</style> -->
+
+<body>
+
+  <!-- Menu -->
+  <div id="menu-bar">
+    <ul class="main-menu">
+      <li>
+        File
+        <ul>
+          <li>
+            New
+            <ul>
+              <li><a onclick="new_document()">New</a></li>
+              <li class="separator"></li>
+              <li><a href="#">New from template</a></li>
+              <li><a href="#">Recent</a></li>
+            </ul>
+          </li>
+          <li><a onclick="open_file()">Open<span>Ctrl+O</span></a></li>
+          <li class="separator"></li>
+          <li><a onclick="save_file()">Save<span>Ctrl+S</span></a></li>
+          <li class="separator"></li>
+          <li class="disabled"><a href="#">Import</a></li>
+          <li>Export</li>
+          <li class="separator"></li>
+          <li><a href="javascript:void(0)">Print<span>Ctrl+P</span></a></li>
+          <li class="separator"></li>
+          <li><a onclick="exit()">Exit</a></li>
+        </ul>
+      </li>
+    </ul>
+    </nav>
+  </div>
+
+  <div id="editor">
+  </div>
+
+  <script src="./js/toastui-editor-all.min.js"></script>
+  <script>
+    const editor = new toastui.Editor({
+      el: document.querySelector('#editor'),
+      previewStyle: 'vertical',
+      height: '90vh',
+      initialEditType: 'wysiwyg',
+      initialValue: `## Welcome to MDE
+
+            The simplest and cleanest markdown editor!
+            
+            `
+    });
+
+    // editor.getHtml();
+  </script>
+
+  <!-- <script src="./js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script> -->
+  <script src="./js/jquery.min.js"></script>
+  <script src="./js/jquery.menu.js"></script>
+
+
+
+  <!-- app specific code -->
+  <script>
+    async function load_file() {
+      var mdContent = await eel.load_file().then(mdContent =>
+        editor.setMarkdown(mdContent, true)
+      );
+    }
+
+    // load_file()
+
+    // create new blank document
+    function new_document() {
+      editor.setMarkdown("")
+      closeMainMenu();
+    }
+
+    function open_file(){
+      closeMainMenu()
+      eel.open_file_dialog();
+
+    }
+
+    eel.expose(load_html)
+    function load_html(content){
+      editor.setHtml(content)
+    }
+
+    eel.expose(load_markdown)
+    function load_markdown(content){
+      editor.setMarkdown(content)
+    }
+
+
+    function exit(){
+      closeMainMenu();
+      eel.exit();
+    }
+
+    function save_file() {
+      var mdContent = editor.getMarkdown();
+      eel.save_file_as_markdown("docment1", mdContent);
+      return true;
+    }
+  </script>
+
+
+
+</body>
+
+</html>
